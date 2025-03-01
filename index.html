@@ -38,6 +38,7 @@
             align-items: center;
             gap: 15px;
             padding: 20px;
+            width: 100%;
         }
         .task-box {
             width: 90%;
@@ -55,18 +56,9 @@
             animation: neonPulse 2s infinite ease-in-out;
         }
         @keyframes neonPulse {
-            0% { 
-                border-color: rgba(0, 255, 255, 0.3);
-                box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
-            }
-            50% { 
-                border-color: rgba(0, 255, 255, 0.7);
-                box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
-            }
-            100% { 
-                border-color: rgba(0, 255, 255, 0.3);
-                box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
-            }
+            0% { border-color: rgba(0, 255, 255, 0.3); box-shadow: 0 0 10px rgba(0, 255, 255, 0.3); }
+            50% { border-color: rgba(0, 255, 255, 0.7); box-shadow: 0 0 20px rgba(0, 255, 255, 0.5); }
+            100% { border-color: rgba(0, 255, 255, 0.3); box-shadow: 0 0 10px rgba(0, 255, 255, 0.3); }
         }
         .task-box::before {
             content: '';
@@ -84,16 +76,8 @@
             animation: rippleEffect 1s ease-out;
         }
         @keyframes rippleEffect {
-            0% {
-                width: 0;
-                height: 0;
-                opacity: 0.5;
-            }
-            100% {
-                width: 200%;
-                height: 200%;
-                opacity: 0;
-            }
+            0% { width: 0; height: 0; opacity: 0.5; }
+            100% { width: 200%; height: 200%; opacity: 0; }
         }
         .task-box:hover {
             background: rgba(255, 255, 255, 0.2);
@@ -126,6 +110,7 @@
             display: block;
             margin: 10px auto;
             border-radius: 5px;
+            object-fit: contain;
         }
         .task-title {
             font-size: 1.5em;
@@ -139,6 +124,7 @@
             padding: 15px;
             border-radius: 10px;
             overflow-x: auto;
+            width: 100%;
         }
         pre {
             margin: 0;
@@ -198,6 +184,7 @@
             display: none;
             opacity: 0;
             transition: opacity 0.5s ease;
+            width: 100%;
         }
         .task-box.expanded .task-content {
             display: block;
@@ -299,17 +286,96 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        /* Media Query untuk Presisi di Mobile */
         @media (max-width: 768px) {
-            .task-box, .quiz-container {
+            .header {
                 width: 95%;
+                padding: 20px;
+            }
+            .container {
+                padding: 10px;
+                gap: 10px;
+            }
+            .task-box {
+                width: 95%;
+                padding: 15px;
             }
             .task-box.expanded {
                 width: 95%;
-                max-height: 70vh;
+                max-height: 85vh;
+                padding: 20px;
             }
-            .copy-btn, .view-btn, .download-btn {
+            .task-title {
+                font-size: 1.3em;
+            }
+            .code-box {
+                padding: 10px;
+            }
+            .copy-btn {
                 padding: 6px 10px;
                 font-size: 0.8em;
+            }
+            .view-btn {
+                padding: 8px 16px;
+                font-size: 0.9em;
+            }
+            .download-btn {
+                padding: 8px 16px;
+                font-size: 0.9em;
+            }
+            .quiz-container {
+                width: 95%;
+                padding: 20px;
+                margin: 20px auto;
+            }
+            .quiz-title {
+                font-size: 1.8em;
+            }
+            .quiz-link {
+                padding: 12px 25px;
+                font-size: 1.1em;
+            }
+        }
+        @media (max-width: 480px) {
+            .header {
+                width: 98%;
+                padding: 15px;
+            }
+            .container {
+                padding: 5px;
+                gap: 8px;
+            }
+            .task-box {
+                width: 98%;
+                padding: 10px;
+            }
+            .task-box.expanded {
+                width: 98%;
+                max-height: 90vh;
+                padding: 15px;
+            }
+            .task-title {
+                font-size: 1.2em;
+            }
+            .code-box {
+                padding: 8px;
+            }
+            .copy-btn {
+                padding: 5px 8px;
+                font-size: 0.7em;
+            }
+            .view-btn {
+                padding: 6px 12px;
+                font-size: 0.8em;
+            }
+            .download-btn {
+                padding: 6px 12px;
+                font-size: 0.8em;
+            }
+            .quiz-container {
+                width: 98%;
+                padding: 15px;
+                margin: 15px auto;
             }
             .quiz-title {
                 font-size: 1.5em;
@@ -341,69 +407,66 @@
             <div class="task-content">
                 <h3>Coding Program</h3>
                 <div class="code-box">
-                    <pre><code>#include &lt;iostream&gt;
-
-#include  &lt;string&gt;
-#include &lt;iomanip&gt; // Untuk format output angka
+                    <pre><code>#include <iostream>
+#include <string>
+#include <iomanip> // Untuk format output angka
 
 using namespace std;
 
 int main() {
-// Deklarasi variabel
-string namaPengirim, alamatPengirim, kotaPengirim;
-string namaPenerima, alamatPenerima, kotaPenerima;
-double beratPaket;
-const double tarifPerKg = 1000.0;  // Tarif pengiriman per kg
-double biayaPengiriman;
+    // Deklarasi variabel
+    string namaPengirim, alamatPengirim, kotaPengirim;
+    string namaPenerima, alamatPenerima, kotaPenerima;
+    double beratPaket;
+    const double tarifPerKg = 1000.0;  // Tarif pengiriman per kg
+    double biayaPengiriman;
 
-// Memasukkan informasi pengirim
-cout << "Masukkan Nama Pengirim: ";
-getline(cin, namaPengirim);
+    // Memasukkan informasi pengirim
+    cout << "Masukkan Nama Pengirim: ";
+    getline(cin, namaPengirim);
 
-cout << "Masukkan Alamat Pengirim: ";
-getline(cin, alamatPengirim);
+    cout << "Masukkan Alamat Pengirim: ";
+    getline(cin, alamatPengirim);
 
-cout << "Masukkan Kota Pengirim: ";
-getline(cin, kotaPengirim);
+    cout << "Masukkan Kota Pengirim: ";
+    getline(cin, kotaPengirim);
 
-// Memasukkan informasi penerima
-cout << "\nMasukkan Nama Penerima: ";
-getline(cin, namaPenerima);
+    // Memasukkan informasi penerima
+    cout << "\nMasukkan Nama Penerima: ";
+    getline(cin, namaPenerima);
 
-cout << "Masukkan Alamat Penerima: ";
-getline(cin, alamatPenerima);
+    cout << "Masukkan Alamat Penerima: ";
+    getline(cin, alamatPenerima);
 
-cout << "Masukkan Kota Penerima: ";
-getline(cin, kotaPenerima);
+    cout << "Masukkan Kota Penerima: ";
+    getline(cin, kotaPenerima);
 
-// Memasukkan informasi paket
-cout << "\nMasukkan Berat Paket (kg): ";
-cin >> beratPaket;
+    // Memasukkan informasi paket
+    cout << "\nMasukkan Berat Paket (kg): ";
+    cin >> beratPaket;
 
-// Menghitung biaya pengiriman
-biayaPengiriman = beratPaket * tarifPerKg;
+    // Menghitung biaya pengiriman
+    biayaPengiriman = beratPaket * tarifPerKg;
 
-// Menampilkan hasil dalam format surat jalan
-cout << "\n======= SURAT JALAN =======\n";
-cout << "Dari:\n";
-cout << "Nama   : " << namaPengirim << endl;
-cout << "Alamat : " << alamatPengirim << endl;
-cout << "Kota   : " << kotaPengirim << endl;
+    // Menampilkan hasil dalam format surat jalan
+    cout << "\n======= SURAT JALAN =======\n";
+    cout << "Dari:\n";
+    cout << "Nama   : " << namaPengirim << endl;
+    cout << "Alamat : " << alamatPengirim << endl;
+    cout << "Kota   : " << kotaPengirim << endl;
 
-cout << "\nKepada:\n";
-cout << "Nama   : " << namaPenerima << endl;
-cout << "Alamat : " << alamatPenerima << endl;
-cout << "Kota   : " << kotaPenerima << endl;
+    cout << "\nKepada:\n";
+    cout << "Nama   : " << namaPenerima << endl;
+    cout << "Alamat : " << alamatPenerima << endl;
+    cout << "Kota   : " << kotaPenerima << endl;
 
-cout << "\nInformasi Paket:\n";
-cout << "Berat Paket       : " << beratPaket << " kg" << endl;
-cout << "Biaya Pengiriman  : Rp" << fixed << setprecision(2) << biayaPengiriman << endl;
+    cout << "\nInformasi Paket:\n";
+    cout << "Berat Paket       : " << beratPaket << " kg" << endl;
+    cout << "Biaya Pengiriman  : Rp" << fixed << setprecision(2) << biayaPengiriman << endl;
 
-return 0;
+    return 0;
 }
-    
 </code></pre>
-                            
                     <button class="copy-btn"></button>
                 </div>
             </div>
@@ -438,45 +501,39 @@ return 0;
     <br>
     <div class="container">
         <div class="task-box">
-            <h2 class="task-title">Coding 2 memasukkan nilai dalam satuan tertentu,</h2>
+            <h2 class="task-title">Coding 2 memasukkan nilai dalam satuan tertentu</h2>
             <button class="view-btn">Lihat</button>
             <div class="task-content">
                 <h3>Coding Program</h3>
                 <div class="code-box">
-                    <pre><code>#include &lt;iostream&gt;
-                   
-                        
-
-#include &lt;iomanip&gt;
+                    <pre><code>#include <iostream>
+#include <iomanip>
 
 using namespace std;
 
 int main() {
-// Deklarasi variabel
-double panjangMeter, panjangKaki, panjangInci;
+    // Deklarasi variabel
+    double panjangMeter, panjangKaki, panjangInci;
 
-// Meminta pengguna memasukkan panjang dalam meter
-cout << "Masukkan panjang dalam meter: ";
-cin >> panjangMeter;
+    // Meminta pengguna memasukkan panjang dalam meter
+    cout << "Masukkan panjang dalam meter: ";
+    cin >> panjangMeter;
 
-// Konversi panjang
-panjangKaki = panjangMeter * 3.281;
-panjangInci = panjangKaki * 12;
+    // Konversi panjang
+    panjangKaki = panjangMeter * 3.281;
+    panjangInci = panjangKaki * 12;
 
-// Menampilkan hasil konversi
-cout << "\n======= KONVERSI PANJANG =======\n";
-cout << fixed << setprecision(2); // Menampilkan dua angka di belakang koma
-cout << "Panjang dalam meter: " << panjangMeter << " meter\n";
-cout << "Panjang dalam kaki : " << panjangKaki << " kaki\n";
-cout << "Panjang dalam inci : " << panjangInci << " inci\n";
-cout << "================================\n";
+    // Menampilkan hasil konversi
+    cout << "\n======= KONVERSI PANJANG =======\n";
+    cout << fixed << setprecision(2); // Menampilkan dua angka di belakang koma
+    cout << "Panjang dalam meter: " << panjangMeter << " meter\n";
+    cout << "Panjang dalam kaki : " << panjangKaki << " kaki\n";
+    cout << "Panjang dalam inci : " << panjangInci << " inci\n";
+    cout << "================================\n";
 
-return 0;
+    return 0;
 }
-    
-                            
-                        
-                        </code></pre>
+</code></pre>
                     <button class="copy-btn"></button>
                 </div>
             </div>
@@ -506,39 +563,33 @@ return 0;
             </div>
         </div>
         <div class="task-box">
-            <h2 class="task-title">Analisa Mengapa Perlu Mempelajari variabel</h2>
+            <h2 class="task-title">Analisa Mengapa Perlu Mempelajari Variabel</h2>
             <button class="view-btn">Lihat</button>
             <div class="task-content">
                 <div class="code-box">
-                    <div class="task-content">
-                        <div class="code-box">
-                            <h3 style="text-align: center; color: #00ffff; text-shadow: 0 0 5px rgba(0, 255, 255, 0.8); margin-bottom: 20px;">🔢 Mengapa Perlu Paham Variabel? 🔢</h3>
-                            <ul style="list-style: none; padding: 0;">
-                                <li style="margin-bottom: 20px;">
-                                    <strong style="color: #ff6b6b; font-size: 1.2em;">🧠 Dasar Pemrograman yang Wajib</strong>
-                                    <p style="color: #e0e0e0; line-height: 1.6;">Variabel adalah pondasi dalam pemrograman. Tanpa memahami variabel, sulit untuk menyimpan dan mengelola data dalam kode.</p>
-                                </li>
-                                <li style="margin-bottom: 20px;">
-                                    <strong style="color: #00d4ff; font-size: 1.2em;">🔄 Menyimpan dan Mengolah Data</strong>
-                                    <p style="color: #e0e0e0; line-height: 1.6;">Variabel memungkinkan kita menyimpan nilai seperti angka, teks, atau objek. Ini penting untuk mengolah informasi dalam program.</p>
-                                </li>
-                                <li style="margin-bottom: 20px;">
-                                    <strong style="color: #ffeb3b; font-size: 1.2em;">📊 Mempermudah Perhitungan</strong>
-                                    <p style="color: #e0e0e0; line-height: 1.6;">Dalam perhitungan matematis, variabel membantu menyimpan angka sementara dan mempermudah pemrosesan data secara dinamis.</p>
-                                </li>
-                                <li style="margin-bottom: 20px;">
-                                    <strong style="color: #4caf50; font-size: 1.2em;">⚡ Membuat Kode Lebih Efisien</strong>
-                                    <p style="color: #e0e0e0; line-height: 1.6;">Dengan variabel, kita bisa menghindari pengulangan kode yang tidak perlu, menjadikan program lebih ringkas dan mudah dikelola.</p>
-                                </li>
-                                <li style="margin-bottom: 20px;">
-                                    <strong style="color: #ab47bc; font-size: 1.2em;">🌍 Digunakan di Semua Bahasa Pemrograman</strong>
-                                    <p style="color: #e0e0e0; line-height: 1.6;">Dari Python, Java, hingga C++, konsep variabel selalu ada. Paham variabel berarti kamu bisa lebih cepat belajar bahasa baru!</p>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-            
+                    <h3 style="text-align: center; color: #00ffff; text-shadow: 0 0 5px rgba(0, 255, 255, 0.8); margin-bottom: 20px;">🔢 Mengapa Perlu Paham Variabel? 🔢</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 20px;">
+                            <strong style="color: #ff6b6b; font-size: 1.2em;">🧠 Dasar Pemrograman yang Wajib</strong>
+                            <p style="color: #e0e0e0; line-height: 1.6;">Variabel adalah pondasi dalam pemrograman. Tanpa memahami variabel, sulit untuk menyimpan dan mengelola data dalam kode.</p>
+                        </li>
+                        <li style="margin-bottom: 20px;">
+                            <strong style="color: #00d4ff; font-size: 1.2em;">🔄 Menyimpan dan Mengolah Data</strong>
+                            <p style="color: #e0e0e0; line-height: 1.6;">Variabel memungkinkan kita menyimpan nilai seperti angka, teks, atau objek. Ini penting untuk mengolah informasi dalam program.</p>
+                        </li>
+                        <li style="margin-bottom: 20px;">
+                            <strong style="color: #ffeb3b; font-size: 1.2em;">📊 Mempermudah Perhitungan</strong>
+                            <p style="color: #e0e0e0; line-height: 1.6;">Dalam perhitungan matematis, variabel membantu menyimpan angka sementara dan mempermudah pemrosesan data secara dinamis.</p>
+                        </li>
+                        <li style="margin-bottom: 20px;">
+                            <strong style="color: #4caf50; font-size: 1.2em;">⚡ Membuat Kode Lebih Efisien</strong>
+                            <p style="color: #e0e0e0; line-height: 1.6;">Dengan variabel, kita bisa menghindari pengulangan kode yang tidak perlu, menjadikan program lebih ringkas dan mudah dikelola.</p>
+                        </li>
+                        <li style="margin-bottom: 20px;">
+                            <strong style="color: #ab47bc; font-size: 1.2em;">🌍 Digunakan di Semua Bahasa Pemrograman</strong>
+                            <p style="color: #e0e0e0; line-height: 1.6;">Dari Python, Java, hingga C++, konsep variabel selalu ada. Paham variabel berarti kamu bisa lebih cepat belajar bahasa baru!</p>
+                        </li>
+                    </ul>
                     <button class="copy-btn"></button>
                 </div>
             </div>
