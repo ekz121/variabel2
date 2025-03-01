@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan Praktikum</title>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0d0d0d;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+        .header {
+            width: 80%;
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+        }
+        .task-box {
+            width: 90%;
+            max-width: 900px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            transition: all 0.5s ease;
+            text-align: left;
+            cursor: pointer;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            animation: neonPulse 2s infinite ease-in-out;
+        }
+        @keyframes neonPulse {
+            0% { 
+                border-color: rgba(0, 255, 255, 0.3);
+                box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+            }
+            50% { 
+                border-color: rgba(0, 255, 255, 0.7);
+                box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+            }
+            100% { 
+                border-color: rgba(0, 255, 255, 0.3);
+                box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+            }
+        }
+        .task-box::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(0, 255, 255, 0.2);
+            border-radius: 50%;
+            opacity: 0;
+            z-index: -1;
+        }
+        .task-box.expanded::before {
+            animation: rippleEffect 1s ease-out;
+        }
+        @keyframes rippleEffect {
+            0% {
+                width: 0;
+                height: 0;
+                opacity: 0.5;
+            }
+            100% {
+                width: 200%;
+                height: 200%;
+                opacity: 0;
+            }
+        }
+        .task-box:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.02);
+            border-color: rgba(0, 255, 255, 0.8);
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.6);
+        }
+        .task-box.expanded {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(1);
+            max-height: 80vh;
+            width: 90%;
+            max-width: 800px;
+            overflow-y: auto;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.7);
+            z-index: 1000;
+            padding: 30px;
+            animation: expandAnimation 0.5s ease forwards;
+            border: 2px solid rgba(0, 255, 255, 0.8);
+        }
+        .task-box.expanded .view-btn {
+            display: none;
+        }
+        .task-box img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 10px auto;
+            border-radius: 5px;
+        }
+        .task-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .code-box {
+            position: relative;
+            background: #1e1e1e;
+            padding: 15px;
+            border-radius: 10px;
+            overflow-x: auto;
+        }
+        pre {
+            margin: 0;
+            color: #ffffff;
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 255, 255, 0.8);
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+            color: #fff;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+        .copy-btn:hover {
+            background: rgba(0, 255, 255, 1);
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+        }
+        .copy-btn.copied {
+            background: rgba(0, 255, 107, 0.8);
+            box-shadow: 0 0 15px rgba(0, 255, 107, 0.8);
+        }
+        .copy-btn::before {
+            content: "Copy";
+        }
+        .copy-btn.copied::before {
+            content: "Copied!";
+        }
+        .view-btn {
+            display: block;
+            margin: 0 auto;
+            background: rgba(0, 255, 255, 0.8);
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            color: #fff;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+        .view-btn:hover {
+            background: rgba(0, 255, 255, 1);
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+        }
+        .task-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .task-box.expanded .task-content {
+            display: block;
+            opacity: 1;
+        }
+        .backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+            display: none;
+        }
+        .backdrop.active {
+            display: block;
+        }
+        .quiz-container {
+            width: 90%;
+            max-width: 900px;
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.2), rgba(0, 212, 255, 0.2));
+            padding: 30px;
+            border-radius: 15px;
+            position: relative;
+            margin: 40px auto;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 1s ease forwards;
+        }
+        .quiz-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 107, 107, 0.3) 0%, transparent 70%);
+            opacity: 0.5;
+            z-index: -1;
+            animation: rotateGlow 10s infinite linear;
+        }
+        .quiz-container:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(255, 107, 107, 0.4), 0 0 20px rgba(0, 212, 255, 0.4);
+        }
+        .quiz-title {
+            font-size: 2em;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 107, 107, 0.8);
+            margin-bottom: 20px;
+        }
+        .quiz-link {
+            display: inline-block;
+            background: rgba(255, 107, 107, 0.8);
+            padding: 15px 30px;
+            border-radius: 10px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(255, 107, 107, 0.6);
+        }
+        .quiz-link:hover {
+            background: rgba(255, 107, 107, 1);
+            transform: translateY(-5px);
+            box-shadow: 0 0 25px rgba(255, 107, 107, 0.9);
+        }
+        .download-btn {
+            display: block;
+            margin: 15px auto 0;
+            background: rgba(255, 107, 107, 0.8);
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            color: #fff;
+            font-size: 1em;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+        }
+        .download-btn:hover {
+            background: rgba(255, 107, 107, 1);
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(255, 107, 107, 0.8);
+        }
+        @keyframes expandAnimation {
+            0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes rotateGlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @media (max-width: 768px) {
+            .task-box, .quiz-container {
+                width: 95%;
+            }
+            .task-box.expanded {
+                width: 95%;
+                max-height: 70vh;
+            }
+            .copy-btn, .view-btn, .download-btn {
+                padding: 6px 10px;
+                font-size: 0.8em;
+            }
+            .quiz-title {
+                font-size: 1.5em;
+            }
+            .quiz-link {
+                padding: 10px 20px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div class="backdrop" id="backdrop"></div>
+    <div class="header">
+        <h2>LAPORAN PRAKTIKUM</h2>
+        <h3>Pemrograman Terstruktur</h3>
+        <p><em>Praktikum 3: variabel(continue)</em></p>
+        <img src="img/11.png" alt="Logo Kampus">
+        <p>Nama : <em>Eka Kurniawan Zein</em></p>
+        <p>NIM : <em>24026004</em></p>
+        <p><strong>PROGRAM STUDI D3 TEKNOLOGI INFORMASI<br>POLITEKNIK SEMEN INDONESIA GRESIK</strong></p>
+        <p><em>01/03/2025</em></p>
+    </div>
+    <div class="container">
+        <div class="task-box">
+            <h2 class="task-title">Coding 1 Membuat surat jalan sederhana</h2>
+            <button class="view-btn">Lihat</button>
+            <div class="task-content">
+                <h3>Coding Program</h3>
+                <div class="code-box">
+                    <pre><code>#include &lt;iostream&gt;
+
+#include  &lt;string&gt;
+#include &lt;iomanip&gt; // Untuk format output angka
+
+using namespace std;
+
+int main() {
+// Deklarasi variabel
+string namaPengirim, alamatPengirim, kotaPengirim;
+string namaPenerima, alamatPenerima, kotaPenerima;
+double beratPaket;
+const double tarifPerKg = 1000.0;  // Tarif pengiriman per kg
+double biayaPengiriman;
+
+// Memasukkan informasi pengirim
+cout << "Masukkan Nama Pengirim: ";
+getline(cin, namaPengirim);
+
+cout << "Masukkan Alamat Pengirim: ";
+getline(cin, alamatPengirim);
+
+cout << "Masukkan Kota Pengirim: ";
+getline(cin, kotaPengirim);
+
+// Memasukkan informasi penerima
+cout << "\nMasukkan Nama Penerima: ";
+getline(cin, namaPenerima);
+
+cout << "Masukkan Alamat Penerima: ";
+getline(cin, alamatPenerima);
+
+cout << "Masukkan Kota Penerima: ";
+getline(cin, kotaPenerima);
+
+// Memasukkan informasi paket
+cout << "\nMasukkan Berat Paket (kg): ";
+cin >> beratPaket;
+
+// Menghitung biaya pengiriman
+biayaPengiriman = beratPaket * tarifPerKg;
+
+// Menampilkan hasil dalam format surat jalan
+cout << "\n======= SURAT JALAN =======\n";
+cout << "Dari:\n";
+cout << "Nama   : " << namaPengirim << endl;
+cout << "Alamat : " << alamatPengirim << endl;
+cout << "Kota   : " << kotaPengirim << endl;
+
+cout << "\nKepada:\n";
+cout << "Nama   : " << namaPenerima << endl;
+cout << "Alamat : " << alamatPenerima << endl;
+cout << "Kota   : " << kotaPenerima << endl;
+
+cout << "\nInformasi Paket:\n";
+cout << "Berat Paket       : " << beratPaket << " kg" << endl;
+cout << "Biaya Pengiriman  : Rp" << fixed << setprecision(2) << biayaPengiriman << endl;
+
+return 0;
+}
+    
+</code></pre>
+                            
+                    <button class="copy-btn"></button>
+                </div>
+            </div>
+        </div>
+        <div class="task-box">
+            <h2 class="task-title">Output Program</h2>
+            <button class="view-btn">Lihat</button>
+            <div class="task-content">
+                <img src="img/2.png" alt="Tampilan Output">
+                <a href="img/2.png" download="Output_Coding1.png" class="download-btn">Unduh Gambar</a>
+            </div>
+        </div>
+        <div class="task-box">
+            <h2 class="task-title">Grafik JSP</h2>
+            <button class="view-btn">Lihat</button>
+            <div class="task-content">
+                <img src="img/3.png" alt="Tampilan Output">
+                <a href="img/3.png" download="JSP_Coding1.png" class="download-btn">Unduh Gambar</a>
+            </div>
+        </div>
+        <div class="task-box">
+            <h2 class="task-title">Penjelasan Program</h2>
+            <button class="view-btn">Lihat</button>
+            <div class="task-content">
+                <img src="img/1.png" alt="Tampilan Output">
+                <a href="img/1.png" download="Penjelasan_Coding1.png" class="download-btn">Unduh Gambar</a>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <div class="container">
+        <div class="task-box">
+            <h2 class="task-title">Coding 2 memasukkan nilai dalam satuan tertentu,</h2>
+            <button class="view-btn">Lihat</button>
+            <div class="task-content">
+                <h3>Coding Program</h3>
+                <div class="code-box">
+                    <pre><code>#include &lt;iostream&gt;
+                   
+                        
+
+#include &lt;iomanip&gt;
+
+using namespace std;
+
+int main() {
+// Deklarasi variabel
+double panjangMeter, panjangKaki, panjangInci;
+
+// Meminta pengguna memasukkan panjang dalam meter
+cout << "Masukkan panjang dalam meter: ";
+cin >> panjangMeter;
+
+// Konversi panjang
+panjangKaki = panjangMeter * 3.281;
+panjangInci = panjangKaki * 12;
+
+// Menampilkan hasil konversi
+cout << "\n======= KONVERSI PANJANG =======\n";
+cout << fixed << setprecision(2); // Menampilkan dua angka di belakang koma
+cout << "Panjang dalam meter: " << panjangMeter << " meter\n";
+cout << "Panjang dalam kaki : " << panjangKaki << " kaki\n";
+cout << "Panjang dalam inci : " << panjangInci << " inci\n";
+cout << "================================\n";
+
+return 0;
+}
+    
+                            
+                        
+                        </code></pre>
+                    <button class="copy-btn"></button>
+                </div>
+            </div>
+        </div>
+        <div class="task-box">
+            <h2 class="task-title">Output Program</h2>
+            <button class="view-btn">Lihat</button>
+            <div class="task-content">
+                <img src="img/5.png" alt="Tampilan Output">
+                <a href="img/5.png" download="Output_Coding2.png" class="download-btn">Unduh Gambar</a>
+            </div>
+        </div>
+        <div class="task-box">
+            <h2 class="task-title">Grafik JSP</h2>
+            <button class="view-btn">Lihat</button>
+            <div class="task-content">
+                <img src="img/6.png" alt="Tampilan Output">
+                <a href="img/6.png" download="JSP_Coding2.png" class="download-btn">Unduh Gambar</a>
+            </div>
+        </div>
+        <div class="task-box">
+            <h2 class="task-title">Penjelasan Program</h2>
+            <button class="view-btn">Lihat</button>
+            <div class="task-content">
+                <img src="img/4.png" alt="Tampilan Output">
+                <a href="img/4.png" download="Penjelasan_Coding2.png" class="download-btn">Unduh Gambar</a>
+            </div>
+        </div>
+        <div class="task-box">
+            <h2 class="task-title">Analisa Mengapa Perlu Mempelajari Pengantar Pemrograman</h2>
+            <button class="view-btn">Lihat</button>
+            <div class="task-content">
+                <div class="code-box">
+                    <div class="task-content">
+                        <div class="code-box">
+                            <h3 style="text-align: center; color: #00ffff; text-shadow: 0 0 5px rgba(0, 255, 255, 0.8); margin-bottom: 20px;">🔢 Mengapa Perlu Paham Variabel? 🔢</h3>
+                            <ul style="list-style: none; padding: 0;">
+                                <li style="margin-bottom: 20px;">
+                                    <strong style="color: #ff6b6b; font-size: 1.2em;">🧠 Dasar Pemrograman yang Wajib</strong>
+                                    <p style="color: #e0e0e0; line-height: 1.6;">Variabel adalah pondasi dalam pemrograman. Tanpa memahami variabel, sulit untuk menyimpan dan mengelola data dalam kode.</p>
+                                </li>
+                                <li style="margin-bottom: 20px;">
+                                    <strong style="color: #00d4ff; font-size: 1.2em;">🔄 Menyimpan dan Mengolah Data</strong>
+                                    <p style="color: #e0e0e0; line-height: 1.6;">Variabel memungkinkan kita menyimpan nilai seperti angka, teks, atau objek. Ini penting untuk mengolah informasi dalam program.</p>
+                                </li>
+                                <li style="margin-bottom: 20px;">
+                                    <strong style="color: #ffeb3b; font-size: 1.2em;">📊 Mempermudah Perhitungan</strong>
+                                    <p style="color: #e0e0e0; line-height: 1.6;">Dalam perhitungan matematis, variabel membantu menyimpan angka sementara dan mempermudah pemrosesan data secara dinamis.</p>
+                                </li>
+                                <li style="margin-bottom: 20px;">
+                                    <strong style="color: #4caf50; font-size: 1.2em;">⚡ Membuat Kode Lebih Efisien</strong>
+                                    <p style="color: #e0e0e0; line-height: 1.6;">Dengan variabel, kita bisa menghindari pengulangan kode yang tidak perlu, menjadikan program lebih ringkas dan mudah dikelola.</p>
+                                </li>
+                                <li style="margin-bottom: 20px;">
+                                    <strong style="color: #ab47bc; font-size: 1.2em;">🌍 Digunakan di Semua Bahasa Pemrograman</strong>
+                                    <p style="color: #e0e0e0; line-height: 1.6;">Dari Python, Java, hingga C++, konsep variabel selalu ada. Paham variabel berarti kamu bisa lebih cepat belajar bahasa baru!</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+            
+                    <button class="copy-btn"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="quiz-container">
+        <h2 class="quiz-title">Eksplorasi Soal-Soal</h2>
+        <a href="https://ekz121.github.io/comming-soon/" class="quiz-link">Ke Halaman Soal</a>
+    </div>
+
+    <script>
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 100 },
+                "color": { "value": "#ffffff" },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.5, "random": true },
+                "size": { "value": 3, "random": true },
+                "move": { "speed": 2, "direction": "none", "out_mode": "out" }
+            },
+            "interactivity": {
+                "events": { "onhover": { "enable": true, "mode": "repulse" } }
+            }
+        });
+
+        const taskBoxes = document.querySelectorAll('.task-box');
+        const backdrop = document.getElementById('backdrop');
+
+        const toggleExpand = (element) => {
+            taskBoxes.forEach(box => {
+                if (box !== element && box.classList.contains('expanded')) {
+                    box.classList.remove('expanded');
+                }
+            });
+            element.classList.toggle('expanded');
+            if (element.classList.contains('expanded')) {
+                backdrop.classList.add('active');
+            } else {
+                backdrop.classList.remove('active');
+            }
+        };
+
+        taskBoxes.forEach(box => {
+            const viewBtn = box.querySelector('.view-btn');
+            viewBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleExpand(box);
+            });
+            box.addEventListener('click', (e) => {
+                if (!e.target.classList.contains('copy-btn')) {
+                    toggleExpand(box);
+                }
+            });
+        });
+
+        backdrop.addEventListener('click', () => {
+            taskBoxes.forEach(box => box.classList.remove('expanded'));
+            backdrop.classList.remove('active');
+        });
+
+        const copyButtons = document.querySelectorAll('.copy-btn');
+        copyButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const codeBox = button.closest('.code-box');
+                const code = codeBox.querySelector('pre, ul')?.textContent || '';
+                navigator.clipboard.writeText(code).then(() => {
+                    button.classList.add('copied');
+                    setTimeout(() => button.classList.remove('copied'), 2000);
+                }).catch(err => console.error('Gagal menyalin: ', err));
+            });
+        });
+    </script>
+</body>
+</html>
